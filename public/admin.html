@@ -1,0 +1,98 @@
+<!-- public/admin.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard | PulseConnect</title>
+  <script src="admin.js"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      color: #e94444;
+    }
+    .card {
+      background: white;
+      padding: 15px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    button {
+      background: #e94444;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+    button:hover {
+      background: #cc3737;
+    }
+  </style>
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
+
+  <h2>🩸 All Donors</h2>
+  <div id="donorsList">Loading...</div>
+
+  <h2>📋 All Requests</h2>
+  <div id="requestsList">Loading...</div>
+
+  <script>
+    async function fetchData() {
+      const donors = await fetch("/admin/donors").then(res => res.json());
+      const requests = await fetch("/admin/requests").then(res => res.json());
+
+      const donorDiv = document.getElementById("donorsList");
+      donorDiv.innerHTML = "";
+      donors.forEach(d => {
+        donorDiv.innerHTML += `
+          <div class="card">
+            <strong>${d.name}</strong> (${d.bloodGroup}) - ${d.location}<br>
+            📧 ${d.email} | 📱 ${d.phone}<br>
+            <button onclick="deleteDonor('${d._id}')">❌ Delete</button>
+          </div>
+        `;
+      });
+
+      const requestDiv = document.getElementById("requestsList");
+      requestDiv.innerHTML = "";
+      requests.forEach(r => {
+        requestDiv.innerHTML += `
+          <div class="card">
+            <strong>${r.bloodGroup}</strong> requested in ${r.location}<br>
+            📧 ${r.email} | 📱 ${r.phone}<br>
+            <button onclick="deleteRequest('${r._id}')">❌ Delete</button>
+          </div>
+        `;
+      });
+    }
+
+    async function deleteDonor(id) {
+      const res = await fetch(`/admin/delete-donor/${id}`, { method: "DELETE" });
+      const msg = await res.json();
+      alert(msg.message);
+      fetchData(); // refresh
+    }
+
+    async function deleteRequest(id) {
+      const res = await fetch(`/admin/delete-request/${id}`, { method: "DELETE" });
+      const msg = await res.json();
+      alert(msg.message);
+      fetchData(); // refresh
+    }
+
+    fetchData();
+  </script>
+
+</body>
+</html>

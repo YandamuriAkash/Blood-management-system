@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Medicare App</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #f2f9ff, #f2f9ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 400px;
+      background: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+      transition: 0.4s;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      color: #e94444;
+    }
+
+    p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    .btn {
+      background-color: #e94444;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .btn:hover {
+      background-color: #cc3737;
+    }
+
+    .link-btn {
+      background: none;
+      border: none;
+      color: #e94444;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .options a {
+      color: #e94444;
+      text-decoration: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .terms {
+      font-size: 14px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .heart {
+      width: 80px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 500px;
+      text-align: left;
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+      color: #e94444;
+    }
+
+    .modal-content p {
+      font-size: 14px;
+      color: #333;
+    }
+
+    .close-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #e94444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Starting Page -->
+      <div id="startPage">
+      <h1>Welcome to pulseconnect</h1>
+      <p>Create an account to get started on your health and happiness journey.</p>
+      <button class="btn" onclick="showLogin()">Login</button>
+      <button class="btn" onclick="showSignup()">Sign Up</button>
+    </div>
+
+    <!-- Login Form -->
+    <div class="hidden" id="loginForm">
+      <h1>Welcome back</h1>
+      <p>Please enter your details to Login</p>
+      <input type="email" id="loginEmail" placeholder="Enter your email" />
+      <input type="password" id="loginPassword" placeholder="Password" />
+      <div class="options">
+        <label><input type="checkbox" /> Remember me</label>
+      </div>
+      <button class="btn" onclick="handleLogin(event)">Login</button>
+      <button class="link-btn" onclick="goHome()">← Back to Home</button>
+    </div>
+       <div class="mainfolder">
+       <a href="index.html" class="mainfolder"></a>
+       </div>
+
+
+    <!-- Sign Up Form -->
+    <div class="hidden" id="signupForm">
+      <h1>Create Your Account</h1>
+      <p>Please enter your details to Sign Up</p>
+      <input type="email" id="signupEmail" placeholder="Enter your email" />
+      <input type="password" id="signupPassword" placeholder="Password" />
+      <input type="password" id="signupConfirm" placeholder="Confirm Password" />
+      <label class="terms">
+        <input type="checkbox" required /> I accept the <a href="#" onclick="showTerms()">terms & conditions</a>
+      </label>
+      <button class="btn" onclick="handleSignup(event)">Sign Up</button>
+      <button class="link-btn" onclick="goHome()">← Back to Home</button>
+    </div>
+  </div>
+
+  <!-- Terms Modal -->
+  <div class="modal hidden" id="termsModal">
+    <div class="modal-content">
+      <h2>Terms & Conditions</h2>
+      <p>
+        By signing up, you agree to follow all the platform’s guidelines. Your data will be kept secure and will not be shared with third parties without consent. Always use this platform responsibly.
+      </p>
+      <button class="close-btn" onclick="closeTerms()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    function showLogin() {
+      document.getElementById("startPage").classList.add("hidden");
+      document.getElementById("signupForm").classList.add("hidden");
+      document.getElementById("loginForm").classList.remove("hidden");
+    }
+
+    function showSignup() {
+      document.getElementById("startPage").classList.add("hidden");
+      document.getElementById("loginForm").classList.add("hidden");
+      document.getElementById("signupForm").classList.remove("hidden");
+    }
+
+    function goHome() {
+      document.getElementById("loginForm").classList.add("hidden");
+      document.getElementById("signupForm").classList.add("hidden");
+      document.getElementById("startPage").classList.remove("hidden");
+    }
+ 
+
+     
+    function showTerms() {
+      document.getElementById("termsModal").classList.remove("hidden");
+    }
+
+    function closeTerms() {
+      document.getElementById("termsModal").classList.add("hidden");
+    }
+
+ async function handleLogin(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    if (!email || !password) {
+      return alert("Please fill in all fields.");
+    }
+
+    try {
+      const response = await fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("✅ Login successful!");
+        window.location.href = "/dashboard.html"; // go to dashboard
+      } else {
+        alert("❌ " + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong during login.");
+    }
+  }
+
+
+     async function handleSignup(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("signupEmail").value;
+    const password = document.getElementById("signupPassword").value;
+    const confirm = document.getElementById("signupConfirm").value;
+
+    if (!email || !password || !confirm) {
+      return alert("Please fill in all fields.");
+    }
+
+    if (password !== confirm) {
+      return alert("Passwords do not match.");
+    }
+
+    try {
+      const response = await fetch("/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("✅ Signup successful!");
+        window.location.href = "/dashboard.html"; // go to dashboard
+      } else {
+        alert("❌ " + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong during signup.");
+    }
+  }
+
+ 
+  </script>
+</body>
+</html>
